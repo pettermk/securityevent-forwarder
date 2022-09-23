@@ -67,6 +67,14 @@ func makeStoreEndpoint(ses SnykEventService) endpoint.Endpoint {
 	}
 }
 
+func makePingEndpoint(ses snykEventService) endpoint.Endpoint {
+	return func(_ context.Context, request interface{}) (interface{}, error) {
+		retval := map[string]string{}
+		retval["ok"] = "true"
+		return retval, nil
+	}
+}
+
 func main() {
 	ses := snykEventService{}
 
@@ -76,7 +84,14 @@ func main() {
 		encodeStoreResponse,
 	)
 
+	pingEventHandler := httptransport.NewServer(
+		makePingEndpoint(ses),
+		decodePingRequest,
+		encodeStoreResponse,
+	)
+
 	http.Handle("/store", storeSnykEventHandler)
+	http.Handle("/ping", pingEventHandler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
@@ -86,6 +101,10 @@ func decodeStoreRequest(_ context.Context, r *http.Request) (interface{}, error)
 		return nil, err
 	}
 	return request, nil
+}
+
+func decodePingRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	return "", nil
 }
 
 func encodeStoreResponse(_ context.Context, w http.ResponseWriter, response interface{}) error {
