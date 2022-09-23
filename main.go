@@ -40,6 +40,7 @@ type storeResponse struct {
 
 func makeStoreEndpoint(ses SnykEventService) endpoint.Endpoint {
 	return func(_ context.Context, request interface{}) (interface{}, error) {
+		println("Processing request")
 		req := request.(storeRequest)
 		snykEvent := SnykEvent{time.Now(), req.Event}
 		eventValue, err := json.Marshal(snykEvent)
@@ -99,6 +100,7 @@ func decodeStoreRequest(_ context.Context, r *http.Request) (interface{}, error)
 	var request storeRequest
 	if err := json.NewDecoder(r.Body).Decode(&request.Event); err != nil {
 		println("Could not decode payload")
+		println(request.Event)
 		return nil, err
 	}
 	return request, nil
