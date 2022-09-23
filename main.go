@@ -57,6 +57,7 @@ func makeStoreEndpoint(ses SnykEventService) endpoint.Endpoint {
 		hub.Send(ctx, event)
 		defer cancel()
 		defer hub.Close(ctx)
+		println("Sent event")
 		err = hub.Close(context.Background())
 		if err != nil {
 			fmt.Println(err)
