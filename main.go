@@ -98,6 +98,7 @@ func main() {
 func decodeStoreRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	var request storeRequest
 	if err := json.NewDecoder(r.Body).Decode(&request.Event); err != nil {
+		println("Could not decode payload")
 		return nil, err
 	}
 	return request, nil
