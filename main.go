@@ -18,6 +18,7 @@ import (
 type SnykEvent struct {
 	TimeStamp (time.Time)
 	Value     (map[string]interface{})
+	Headers   (map[string][]string)
 }
 
 type SnykEventService interface {
@@ -31,7 +32,8 @@ func (snykEventService) Store(event SnykEvent) (string, error) {
 }
 
 type storeRequest struct {
-	Event (map[string]interface{})
+	Event   (map[string]interface{})
+	Headers (map[string][]string)
 }
 
 type storeResponse struct {
@@ -42,7 +44,7 @@ func makeStoreEndpoint(ses SnykEventService) endpoint.Endpoint {
 	return func(_ context.Context, request interface{}) (interface{}, error) {
 		println("Processing request")
 		req := request.(storeRequest)
-		snykEvent := SnykEvent{time.Now(), req.Event}
+		snykEvent := SnykEvent{time.Now(), req.Event, req.Headers}
 		eventValue, err := json.Marshal(snykEvent)
 		tokenProvider, err := aad.NewJWTProvider(aad.JWTProviderWithEnvironmentVars())
 		if err != nil {
@@ -103,6 +105,7 @@ func decodeStoreRequest(_ context.Context, r *http.Request) (interface{}, error)
 		println(request.Event)
 		return nil, err
 	}
+	request.Headers = r.Header
 	return request, nil
 }
 
