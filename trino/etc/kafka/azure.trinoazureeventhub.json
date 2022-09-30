@@ -1,0 +1,22 @@
+{
+	"tableName": "snyk-events",
+	"schemaName": "snyk-events",
+	"topicName": "snyk-events.snyk-events",
+	"message": {
+		"dataFormat": "json",
+		"fields": [
+			{
+				"name": "Event",
+				"mapping": "Event",
+				"type": "JSON"
+			},
+			{
+				"name": "TimeStamp",
+				"mapping": "TimeStamp",
+				"type": "TIMESTAMP",
+				"dataFormat": "custom-date-time",
+				"formatHint": "yyyy-MM-dd HH:mm:ss.SSS"
+			}
+		]
+	}
+}
