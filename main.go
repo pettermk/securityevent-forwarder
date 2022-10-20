@@ -9,8 +9,8 @@ import (
 	"net/http"
 	"time"
 
-	aad "github.com/Azure/azure-amqp-common-go/aad"
-	eventhubs "github.com/Azure/azure-event-hubs-go"
+	aad "github.com/Azure/azure-amqp-common-go/v3/aad"
+	eventhubs "github.com/Azure/azure-event-hubs-go/v3"
 	"github.com/go-kit/kit/endpoint"
 	httptransport "github.com/go-kit/kit/transport/http"
 )
