@@ -10,6 +10,10 @@ COPY *.go ./
 
 RUN go build -o /securityevents-forwarder
 
+# Run as arbitrary user id in openshift
+RUN chgrp -R 0 /app && \
+    chmod -R g=u /app
+
 EXPOSE 8080
 
 CMD [ "/securityevents-forwarder" ]
