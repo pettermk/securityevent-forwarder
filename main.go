@@ -41,19 +41,20 @@ type storeResponse struct {
 }
 
 func makeStoreEndpoint(ses SnykEventService) endpoint.Endpoint {
+	tokenProvider, err := aad.NewJWTProvider(aad.JWTProviderWithEnvironmentVars())
+	if err != nil {
+		log.Fatalf("failed to configure AAD JWT provider: %s\n", err)
+	}
+	hub, err := eventhubs.NewHub("snyk-events", "snyk-events", tokenProvider)
+	if err != nil {
+		log.Fatalf("failed to get hub %s\n", err)
+	}
+
 	return func(_ context.Context, request interface{}) (interface{}, error) {
 		println("Processing request")
 		req := request.(storeRequest)
 		snykEvent := SnykEvent{time.Now(), req.Event, req.Headers}
 		eventValue, err := json.Marshal(snykEvent)
-		tokenProvider, err := aad.NewJWTProvider(aad.JWTProviderWithEnvironmentVars())
-		if err != nil {
-			log.Fatalf("failed to configure AAD JWT provider: %s\n", err)
-		}
-		hub, err := eventhubs.NewHub("snyk-events", "snyk-events", tokenProvider)
-		if err != nil {
-			log.Fatalf("failed to get hub %s\n", err)
-		}
 		// ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
 		ctx, cancel := context.WithCancel(context.Background())
 		event := eventhubs.NewEventFromString(string(eventValue))
