@@ -2,11 +2,13 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	aad "github.com/Azure/azure-amqp-common-go/v3/aad"
@@ -40,6 +42,28 @@ type storeResponse struct {
 	Event (map[string]interface{})
 }
 
+func postToElastic(body map[string]interface{}) {
+	elasticUrl := os.Getenv("ELASTIC_URL")
+	elasticPassword := os.Getenv(("ELASTIC_PASSWORD"))
+	elasticUser := os.Getenv("ELASTIC_USER")
+	data, error := json.Marshal(body)
+	if error != nil {
+		log.Fatal("Could not marshal data", error)
+	}
+	req, error := http.NewRequest(
+		"POST", elasticUrl, bytes.NewBuffer(data),
+	)
+	if error != nil {
+		log.Printf("Creating request failed %s\n", error)
+	}
+
+	req.SetBasicAuth(elasticUser, elasticPassword)
+	req.Header.Add("Content-Type", "application/json")
+	client := &http.Client{}
+	resp, error := client.Do(req)
+	log.Print(resp)
+}
+
 func makeStoreEndpoint(ses SnykEventService) endpoint.Endpoint {
 	tokenProvider, err := aad.NewJWTProvider(aad.JWTProviderWithEnvironmentVars())
 	if err != nil {
@@ -67,6 +91,7 @@ func makeStoreEndpoint(ses SnykEventService) endpoint.Endpoint {
 			fmt.Println(err)
 		}
 
+		postToElastic(req.Event)
 		return storeResponse{req.Event}, nil
 	}
 }
