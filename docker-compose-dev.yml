@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+    db:
+        image: postgres
+        ports:
+            - "5432:5432"
+        volumes:
+            - dbdata:/var/lib/postgresql/data
+        environment:
+            POSTGRES_DB: "isc-monitoring"
+            POSTGRES_USER: "isc-monitoring"
+            POSTGRES_PASSWORD: "123456"
+volumes:
+    dbdata:
