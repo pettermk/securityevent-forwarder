@@ -10,12 +10,16 @@ fn index() -> &'static str {
 #[derive(Debug, PartialEq, Eq, Deserialize)]
 #[serde(crate = "rocket::serde")]
 struct SnykEvent {
-    project_id: String,
-    test: Vec<HashMap<String, Value>>
+    project: HashMap<String, Value>,
+    newIssues: Vec<HashMap<String, Value>>,
+    removedIssues: Vec<HashMap<String, Value>>
 }
 
 #[post("/store", data = "<input>")]
-async fn store(input: Json<SnykEvent>) -> std::io::Result<()> {
+async fn store(input: Json<NewSnykEvent>) -> std::io::Result<()> {
+    snyk-webhook-api::crud::create_post(input.into_inner(), &connection)
+        .map(|post| post_created(post))
+        .map_err(|error| error_status(error))
     println!("Test");
     println!("{:?}", input);
     Ok(())

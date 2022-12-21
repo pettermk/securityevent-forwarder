@@ -1,0 +1,42 @@
+{
+    "newIssues": [],
+    "org": {
+        "created": "2022-02-02T09:42:00.329Z",
+        "group": null,
+        "id": "7ff8041b-21e6-45e5-a749-c924ec4c04df",
+        "name": "ISC AppSec",
+        "slug": "isc-appsec",
+        "url": "https://app.snyk.io/org/isc-appsec"
+    },
+    "project": {
+        "attributes": {
+            "criticality": [],
+            "environment": [],
+            "lifecycle": []
+        },
+        "branch": "main",
+        "browseUrl": "https://app.snyk.io/org/isc-appsec/project/cbdf405e-2971-4c01-9ec0-f4e717e9f4f7",
+        "created": "2022-03-24T13:27:13.204Z",
+        "id": "cbdf405e-2971-4c01-9ec0-f4e717e9f4f7",
+        "imageTag": "4.3.1",
+        "importingUser": null,
+        "isMonitored": true,
+        "issueCountsBySeverity": {
+            "critical": 0,
+            "high": 0,
+            "low": 0,
+            "medium": 0
+        },
+        "lastTestedDate": "2022-12-18T16:30:06.598Z",
+        "name": "reveal.js",
+        "origin": "cli",
+        "owner": null,
+        "readOnly": false,
+        "remoteRepoUrl": "http://github.com/equinor/securebydesign.git",
+        "tags": [],
+        "testFrequency": "daily",
+        "totalDependencies": 0,
+        "type": "npm"
+    },
+    "removedIssues": []
+}
