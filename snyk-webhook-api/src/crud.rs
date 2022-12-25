@@ -3,13 +3,13 @@
 use diesel;
 use diesel::prelude::*;
 
-use crate::model::SnykEvent;
-use crate::model::NewSnykEvent;
+use crate::models::SnykEvent;
+use crate::models::NewSnykEvent;
 use crate::schema::snyk_events;
 use crate::schema::snyk_events::dsl::*;
 
-pub fn create_snyk_event(new_snyk_event: NewSnykEvent, conn: &PgConnection) -> QueryResult<SnykEvent> {
+pub fn create_snyk_event(new_snyk_event: NewSnykEvent, conn: &mut PgConnection) -> QueryResult<SnykEvent> {
     diesel::insert_into(snyk_events::table)
-        .values(&new_post)
+        .values(&new_snyk_event)
         .get_result(conn)
 }
