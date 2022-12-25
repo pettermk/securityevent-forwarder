@@ -6,7 +6,6 @@ use diesel::prelude::*;
 use crate::models::SnykEvent;
 use crate::models::NewSnykEvent;
 use crate::schema::snyk_events;
-use crate::schema::snyk_events::dsl::*;
 
 pub fn create_snyk_event(new_snyk_event: NewSnykEvent, conn: &mut PgConnection) -> QueryResult<SnykEvent> {
     diesel::insert_into(snyk_events::table)
