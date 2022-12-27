@@ -10,5 +10,13 @@ services:
             POSTGRES_DB: "snyk-events"
             POSTGRES_USER: "snyk-events"
             POSTGRES_PASSWORD: "123456"
+    api:
+        build: snyk-webhook-api/
+        ports:
+            - "8000:8000"
+        environment:
+            - DATABASE_URL=postgres://snyk-events:123456@db/snyk-events
+            - ROCKET_ADDRESS=0.0.0.0
+
 volumes:
     dbdata:
