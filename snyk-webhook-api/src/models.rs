@@ -1,7 +1,7 @@
 extern crate rocket;
 use rocket::serde::{json::{Value}, Deserialize};
 use diesel::{prelude::*};
-use chrono::{NaiveDateTime, DateTime};
+use chrono::{NaiveDateTime, DateTime, offset::Utc};
 use crate::schema::snyk_events;
 
 
@@ -15,8 +15,14 @@ pub struct SnykEvent {
     pub removed_issues: Vec<Option<Value>>,
 }
 
+#[derive(Debug, PartialEq, Eq, Deserialize)]
+pub struct NewSnykEventDto {
+    pub org: Value,
+    pub project: Value,
+    pub new_issues: Vec<Option<Value>>,
+    pub removed_issues: Vec<Option<Value>>,
+}
 
-// #[derive(Debug, PartialEq, Eq, Deserialize)]
 #[derive(Insertable, Debug, PartialEq, Eq, Deserialize)]
 #[diesel(table_name=snyk_events)]
 pub struct NewSnykEvent {
@@ -26,6 +32,16 @@ pub struct NewSnykEvent {
     pub project: Value,
     pub new_issues: Vec<Option<Value>>,
     pub removed_issues: Vec<Option<Value>>,
+}
+
+pub fn from_new_snyk_event_dto(new_snyk_event: NewSnykEventDto) -> NewSnykEvent {
+    return NewSnykEvent {
+        ts: Utc::now().naive_utc(),
+        org: new_snyk_event.org,
+        project: new_snyk_event.project,
+        new_issues: new_snyk_event.new_issues,
+        removed_issues: new_snyk_event.removed_issues
+    }
 }
 
 // pub fn time_to_json(t: NaiveDateTime) -> String {
