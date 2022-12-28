@@ -16,11 +16,12 @@ pub struct SnykEvent {
 }
 
 #[derive(Debug, PartialEq, Eq, Deserialize)]
+#[allow(non_snake_case)]
 pub struct NewSnykEventDto {
     pub org: Value,
     pub project: Value,
-    pub new_issues: Vec<Option<Value>>,
-    pub removed_issues: Vec<Option<Value>>,
+    pub newIssues: Vec<Option<Value>>,
+    pub removedIssues: Vec<Option<Value>>,
 }
 
 #[derive(Insertable, Debug, PartialEq, Eq, Deserialize)]
@@ -39,8 +40,8 @@ pub fn from_new_snyk_event_dto(new_snyk_event: NewSnykEventDto) -> NewSnykEvent 
         ts: Utc::now().naive_utc(),
         org: new_snyk_event.org,
         project: new_snyk_event.project,
-        new_issues: new_snyk_event.new_issues,
-        removed_issues: new_snyk_event.removed_issues
+        new_issues: new_snyk_event.newIssues,
+        removed_issues: new_snyk_event.removedIssues
     }
 }
 
