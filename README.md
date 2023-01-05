@@ -1,3 +1,5 @@
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/pettermk/securityevent-forwarder/badge)](https://api.securityscorecards.dev/projects/github.com/pettermk/securityevent-forwarder)
+
 # securityevent-forwarder
 
 Test locally
