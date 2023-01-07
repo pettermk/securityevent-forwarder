@@ -2,6 +2,7 @@ extern crate rocket;
 use rocket::serde::{json::{Value}, Deserialize};
 use diesel::{prelude::*};
 use chrono::{NaiveDateTime, DateTime, offset::Utc};
+use serde::Serialize;
 use crate::schema::snyk_events;
 
 
@@ -24,7 +25,7 @@ pub struct NewSnykEventDto {
     pub removedIssues: Vec<Option<Value>>,
 }
 
-#[derive(Insertable, Debug, PartialEq, Eq, Deserialize)]
+#[derive(Insertable, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[diesel(table_name=snyk_events)]
 pub struct NewSnykEvent {
     #[serde(with = "json_time")]
@@ -45,18 +46,18 @@ pub fn from_new_snyk_event_dto(new_snyk_event: NewSnykEventDto) -> NewSnykEvent 
     }
 }
 
-// pub fn time_to_json(t: NaiveDateTime) -> String {
-// 	DateTime::<Utc>::from_utc(t, Utc).to_rfc3339()
-// }
+pub fn time_to_json(t: NaiveDateTime) -> String {
+	DateTime::<Utc>::from_utc(t, Utc).to_rfc3339()
+}
 
 mod json_time {
 	use super::*;
 	use serde::{Deserialize, Deserializer, de::Error};
-    // use serde::{Serialize, Serializer};
+    use serde::{Serialize, Serializer};
 
-	// pub fn serialize<S: Serializer>(time: &NaiveDateTime, serializer: S) -> Result<S::Ok, S::Error> {
-	// 	time_to_json(time.clone()).serialize(serializer)
-	// }
+	pub fn serialize<S: Serializer>(time: &NaiveDateTime, serializer: S) -> Result<S::Ok, S::Error> {
+		time_to_json(time.clone()).serialize(serializer)
+	}
 
     pub fn deserialize<'de, D: Deserializer<'de>>(deserializer: D) -> Result<NaiveDateTime, D::Error> {
         let time: String = Deserialize::deserialize(deserializer)?;
