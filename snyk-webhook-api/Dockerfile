@@ -7,7 +7,7 @@ COPY *.toml ./
 RUN apt-get update && apt-get install -y libpq-dev
 RUN cargo install --path .
 
-FROM debian:buster-slim
+FROM debian:bullseye-20230208-slim
 RUN apt-get update && apt-get install -y postgresql && rm -rf /var/lib/apt/lists/*
 COPY --from=build-env /usr/local/cargo/bin/snyk-webhook-api /usr/local/bin/snyk-webhook-api
 CMD ["snyk-webhook-api"]
