@@ -26,6 +26,6 @@ require (
 	github.com/golang-jwt/jwt/v4 v4.4.2 // indirect
 	github.com/jpillora/backoff v1.0.0 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
-	golang.org/x/crypto v0.1.0 // indirect
-	golang.org/x/net v0.1.0 // indirect
+	golang.org/x/crypto v0.31.0 // indirect
+	golang.org/x/net v0.21.0 // indirect
 )
